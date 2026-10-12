@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OnboardAI - Hành trình hội nhập nhân sự mới | BTL-20 CSE122</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <style>
+    .landing-nav {
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 3rem;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .hero-section {
+      background: radial-gradient(circle at top right, rgba(79, 70, 229, 0.12), transparent 45%),
+                  radial-gradient(circle at bottom left, rgba(6, 182, 212, 0.1), transparent 40%),
+                  #ffffff;
+      padding: 5rem 3rem 4rem;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .role-grid-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-sm);
+    }
+    .role-grid-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--primary);
+    }
+    .matrix-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body style="background: #f8fafc;">
+
+  <!-- Navigation Bar -->
+  <nav class="landing-nav">
+    <div style="display: flex; align-items: center; gap: 0.75rem;">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+      </div>
+      <div style="font-weight: 800; font-size: 1.35rem; color: #0f172a;">
+        Onboard<span style="color: var(--secondary);">AI</span>
+      </div>
+      <span class="badge badge-info" style="font-size: 0.72rem;">BTL-20 • CSE122</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="#roles" style="font-weight: 600; font-size: 0.9rem; color: #475569;">Vai trò & Màn hình</a>
+      <a href="#ai-features" style="font-weight: 600; font-size: 0.9rem; color: #475569;">3 Tính năng AI</a>
+      <a href="#screens" style="font-weight: 600; font-size: 0.9rem; color: #475569;">Kiểm kê 12 Giao diện</a>
+      <a href="login.html" class="btn btn-outline btn-sm">Đăng nhập</a>
+      <button onclick="enterSystemQuick('newhire')" class="btn btn-primary btn-sm">Truy cập Dashboard</button>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <header class="hero-section">
+    <div style="max-width: 860px; margin: 0 auto;">
+      <div style="display: inline-flex; align-items: center; gap: 8px; background: #eef2ff; color: #4f46e5; padding: 6px 16px; border-radius: var(--radius-full); font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem;">
+        <span>🎓</span> HỌC PHẦN: PHÁT TRIỂN ỨNG DỤNG WEB CƠ BẢN (CSE122)
+      </div>
+      <h1 style="font-size: 3rem; font-weight: 850; letter-spacing: -0.03em; color: #0f172a; line-height: 1.15; margin-bottom: 1.25rem;">
+        Hành Trình Hội Nhập Nhân Sự Mới Thông Minh
+      </h1>
+      <p style="font-size: 1.15rem; color: #475569; line-height: 1.6; margin-bottom: 2.25rem;">
+        Giải pháp Mini-product Frontend toàn diện giải quyết 4 bài toán: <strong>Checklist phân tán</strong>, <strong>Tài liệu khó tìm</strong>, <strong>Khó theo dõi tiến độ</strong> và <strong>Câu hỏi lặp lại</strong> bằng trải nghiệm đa vai trò cùng 3 mô-đun AI mô phỏng chuyên sâu.
+      </p>
+
+      <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <button onclick="enterSystemQuick('newhire')" class="btn btn-primary" style="padding: 0.85rem 1.75rem; font-size: 1rem;">
+          🚀 Bắt đầu Trải nghiệm (Nhân sự mới)
+        </button>
+        <button onclick="enterSystemQuick('hr')" class="btn btn-ai" style="padding: 0.85rem 1.75rem; font-size: 1rem;">
+          ✨ Xem Bảng điều khiển HR & Cảnh báo AI
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Section: 4 Vai trò & Lối vào nhanh -->
+  <section id="roles" style="max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">
+        Thiết Kế 4 Vai Trò Nghiệp Vụ Riêng Biệt
+      </h2>
+      <p style="color: #64748b; font-size: 1rem;">
+        Mỗi vai trò đều có không gian làm việc chuyên trách, đầy đủ các thao tác nghiệp vụ và luồng tương tác thực tế
+      </p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+      
+      <!-- Role 1: New Hire -->
+      <div class="role-grid-card">
+        <div>
+          <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+            🌱
+          </div>
+          <span class="role-pill newhire" style="margin-bottom: 0.5rem;">Vai trò SV1</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Nhân sự mới</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem;">
+            Theo dõi hành trình 60 ngày thử việc, đánh dấu checklist trực quan, đọc tài liệu nội bộ và hỏi đáp chính sách với AI Co-Pilot.
+          </p>
+          <ul style="font-size: 0.8rem; color: #334155; padding-left: 1.25rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            <li>1. Onboarding Dashboard</li>
+            <li>2. Checklist nhiệm vụ 4 phase</li>
+            <li>3. AI-1: Policy Q&A trích nguồn</li>
+          </ul>
+        </div>
+        <button onclick="enterSystemQuick('newhire')" class="btn btn-outline" style="width: 100%;">
+          Đăng nhập Nhân sự mới →
+        </button>
+      </div>
+
+      <!-- Role 2: Mentor -->
+      <div class="role-grid-card">
+        <div>
+          <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: #ecfdf5; color: #059669; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+            🤝
+          </div>
+          <span class="role-pill mentor" style="margin-bottom: 0.5rem;">Vai trò SV2</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Mentor / Quản lý</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem;">
+            Theo dõi các mentee được phân công, ghi chép nhật ký các buổi gặp 1-on-1 định kỳ và phân công đầu việc nghiệp vụ trực tiếp.
+          </p>
+          <ul style="font-size: 0.8rem; color: #334155; padding-left: 1.25rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            <li>4. Danh sách Mentee & Cảnh báo</li>
+            <li>5. Sổ tay Check-in 1-on-1 (CRUD)</li>
+            <li>6. Giao nhiệm vụ & Đánh giá (CRUD)</li>
+          </ul>
+        </div>
+        <button onclick="enterSystemQuick('mentor')" class="btn btn-outline" style="width: 100%;">
+          Đăng nhập Mentor →
+        </button>
+      </div>
+
+      <!-- Role 3: HR -->
+      <div class="role-grid-card">
+        <div>
+          <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: #faf5ff; color: #7c3aed; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+            🧭
+          </div>
+          <span class="role-pill hr" style="margin-bottom: 0.5rem;">Vai trò SV3</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Nhân sự (HR)</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem;">
+            Xây dựng khuôn mẫu hành trình chuẩn, quản lý thư viện số chính sách và sử dụng AI dự báo sớm rủi ro chậm tiến độ để can thiệp.
+          </p>
+          <ul style="font-size: 0.8rem; color: #334155; padding-left: 1.25rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            <li>7. AI-2: Checklist Personalizer</li>
+            <li>8. Thư viện Số & Chính sách (CRUD)</li>
+            <li>9. AI-3: HR Dashboard & Progress Risk</li>
+          </ul>
+        </div>
+        <button onclick="enterSystemQuick('hr')" class="btn btn-outline" style="width: 100%;">
+          Đăng nhập HR Ops →
+        </button>
+      </div>
+
+      <!-- Role 4: Admin -->
+      <div class="role-grid-card">
+        <div>
+          <div style="width: 48px; height: 48px; border-radius: var(--radius-md); background: #fffbeb; color: #d97706; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem;">
+            ⚙️
+          </div>
+          <span class="role-pill admin" style="margin-bottom: 0.5rem;">Vai trò SV3</span>
+          <h3 style="font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem;">Quản trị viên</h3>
+          <p style="font-size: 0.875rem; color: #64748b; line-height: 1.5; margin-bottom: 1.25rem;">
+            Quản trị sơ đồ phòng ban, định danh tài khoản, phân quyền truy cập và thiết lập tham số SLA cảnh báo tự động của toàn hệ thống.
+          </p>
+          <ul style="font-size: 0.8rem; color: #334155; padding-left: 1.25rem; margin-bottom: 1.5rem; line-height: 1.6;">
+            <li>10. Quản lý Phòng ban (CRUD)</li>
+            <li>11. Quản lý Tài khoản & Phân quyền</li>
+            <li>12. Cấu hình Hệ thống & AI SLA</li>
+          </ul>
+        </div>
+        <button onclick="enterSystemQuick('admin')" class="btn btn-outline" style="width: 100%;">
+          Đăng nhập Quản trị viên →
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Section: 3 Tính năng AI Cốt lõi -->
+  <section id="ai-features" style="background: #ffffff; padding: 4rem 1.5rem; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div style="text-align: center; margin-bottom: 3rem;">
+        <div class="ai-header-badge">
+          ✨ ĐÁP ỨNG TIÊU CHUẨN MỤC 11 & 12 ĐỀ TÀI
+        </div>
+        <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">
+          3 Trải Nghiệm AI Mô Phỏng Phía Frontend
+        </h2>
+        <p style="color: #64748b; font-size: 1rem;">
+          Tuân thủ nguyên tắc: Nhập liệu → Kiểm tra hợp lệ → Đang xử lý → Kết quả → Giải thích → Quyền kiểm soát của người dùng
+        </p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;">
+        
+        <!-- AI-1 -->
+        <div class="card ai-card">
+          <span class="badge badge-info" style="margin-bottom: 0.75rem;">AI-1: Nhân sự mới</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+            Policy Q&A with Citations
+          </h3>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5; margin-bottom: 1rem;">
+            Trợ lý tra cứu sổ tay nhân viên và quy chuẩn kỹ thuật. Đưa ra câu trả lời kèm trích dẫn văn bản, điều khoản và cho phép lưu vào sổ tay ghi chú cá nhân. Có chế độ kiểm thử lỗi không chắc chắn.
+          </p>
+          <a href="pages/newhire-ai-help.html" class="btn btn-outline btn-sm">Xem màn hình AI-1 →</a>
+        </div>
+
+        <!-- AI-2 -->
+        <div class="card ai-card">
+          <span class="badge badge-info" style="margin-bottom: 0.75rem;">AI-2: HR & Mentor</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+            Checklist Personalizer
+          </h3>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5; margin-bottom: 1rem;">
+            Tự động sinh checklist 4 giai đoạn dựa trên phòng ban, vị trí và cấp bậc (Senior/Junior). Giải thích lý do lựa chọn từng nhiệm vụ và cho phép HR chấp nhận hoặc tinh chỉnh trước khi lưu.
+          </p>
+          <a href="pages/hr-journey-management.html" class="btn btn-outline btn-sm">Xem màn hình AI-2 →</a>
+        </div>
+
+        <!-- AI-3 -->
+        <div class="card ai-card">
+          <span class="badge badge-info" style="margin-bottom: 0.75rem;">AI-3: HR People Ops</span>
+          <h3 style="font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">
+            Progress Risk Detector
+          </h3>
+          <p style="font-size: 0.875rem; color: #475569; line-height: 1.5; margin-bottom: 1rem;">
+            Quét toàn bộ nhân sự đang thử việc, phân tích ma trận giữa thời gian đã trôi qua, tỷ lệ tasks hoàn thành và tần suất check-in 1-on-1. Cảnh báo nguy cơ trễ hạn kèm đề xuất can thiệp tức thời.
+          </p>
+          <a href="pages/hr-dashboard.html" class="btn btn-outline btn-sm">Xem màn hình AI-3 →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Bảng Kiểm Kê Màn Hình Bắt Buộc (Mục 8 & 9) -->
+  <section id="screens" style="max-width: 1200px; margin: 0 auto; padding: 4rem 1.5rem;">
+    <div style="margin-bottom: 2rem;">
+      <h2 style="font-size: 2rem; font-weight: 800; color: #0f172a; margin-bottom: 0.5rem;">
+        Bảng Kiểm Kê 12 Giao Diện Nền Tảng (Bắt Buộc)
+      </h2>
+      <p style="color: #64748b; font-size: 0.95rem;">
+        Khởi tạo theo Mục 8 của đề tài BTL-20. Mỗi giao diện đã được triển khai đầy đủ HTML ngữ nghĩa, CSS responsive, JavaScript DOM, LocalStorage CRUD và mô phỏng AI.
+      </p>
+    </div>
+
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tệp HTML</th>
+            <th>Giao diện & Vai trò</th>
+            <th>Thao tác CRUD</th>
+            <th>Tính năng AI</th>
+            <th>Sinh viên</th>
+            <th style="text-align: right;">Mở trang</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Role 1: Newhire -->
+          <tr>
+            <td>1</td>
+            <td><code>newhire-onboarding-dashboard.html</code></td>
+            <td><strong>Onboarding Dashboard</strong> (Nhân sự mới)</td>
+            <td><span class="matrix-badge" style="background:#e0f2fe; color:#0369a1;">R</span></td>
+            <td>Tip cá nhân</td>
+            <td>SV1</td>
+            <td style="text-align: right;"><a href="pages/newhire-onboarding-dashboard.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><code>newhire-checklist.html</code></td>
+            <td><strong>Checklist Hội nhập</strong> (Nhân sự mới)</td>
+            <td><span class="matrix-badge" style="background:#fef3c7; color:#92400e;">C / R / U</span></td>
+            <td>-</td>
+            <td>SV1</td>
+            <td style="text-align: right;"><a href="pages/newhire-checklist.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><code>newhire-ai-help.html</code></td>
+            <td><strong>AI Help: Hỏi đáp Chính sách</strong> (Nhân sự mới)</td>
+            <td><span class="matrix-badge" style="background:#dcfce7; color:#15803d;">C / R / U / D</span></td>
+            <td><span class="badge badge-info">AI-1 Citations</span></td>
+            <td>SV1</td>
+            <td style="text-align: right;"><a href="pages/newhire-ai-help.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+
+          <!-- Role 2: Mentor -->
+          <tr>
+            <td>4</td>
+            <td><code>mentor-mentee-list.html</code></td>
+            <td><strong>Mentee List & Cảnh báo</strong> (Mentor)</td>
+            <td><span class="matrix-badge" style="background:#e0f2fe; color:#0369a1;">R</span></td>
+            <td>-</td>
+            <td>SV2</td>
+            <td style="text-align: right;"><a href="pages/mentor-mentee-list.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><code>mentor-checkin-note.html</code></td>
+            <td><strong>Checkin Note 1-on-1</strong> (Mentor)</td>
+            <td><span class="matrix-badge" style="background:#fef3c7; color:#92400e;">C / R / U</span></td>
+            <td>-</td>
+            <td>SV2</td>
+            <td style="text-align: right;"><a href="pages/mentor-checkin-note.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><code>mentor-task-assignment.html</code></td>
+            <td><strong>Task Assignment & Feedback</strong> (Mentor)</td>
+            <td><span class="matrix-badge" style="background:#dcfce7; color:#15803d;">C / R / U / D</span></td>
+            <td>-</td>
+            <td>SV2</td>
+            <td style="text-align: right;"><a href="pages/mentor-task-assignment.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+
+          <!-- Role 3: HR -->
+          <tr>
+            <td>7</td>
+            <td><code>hr-journey-management.html</code></td>
+            <td><strong>Journey Management</strong> (HR)</td>
+            <td><span class="matrix-badge" style="background:#e0f2fe; color:#0369a1;">R (C/U)</span></td>
+            <td><span class="badge badge-info">AI-2 Personalizer</span></td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/hr-journey-management.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><code>hr-document-library.html</code></td>
+            <td><strong>Document Library</strong> (HR)</td>
+            <td><span class="matrix-badge" style="background:#fef3c7; color:#92400e;">C / R / U</span></td>
+            <td>-</td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/hr-document-library.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><code>hr-dashboard.html</code></td>
+            <td><strong>HR Dashboard & Analytics</strong> (HR)</td>
+            <td><span class="matrix-badge" style="background:#dcfce7; color:#15803d;">C / R / U / D</span></td>
+            <td><span class="badge badge-info">AI-3 Progress Risk</span></td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/hr-dashboard.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+
+          <!-- Role 4: Admin -->
+          <tr>
+            <td>10</td>
+            <td><code>admin-department-management.html</code></td>
+            <td><strong>Department Management</strong> (Admin)</td>
+            <td><span class="matrix-badge" style="background:#e0f2fe; color:#0369a1;">R (C/U/D)</span></td>
+            <td>-</td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/admin-department-management.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><code>admin-user-management.html</code></td>
+            <td><strong>User Management & Roles</strong> (Admin)</td>
+            <td><span class="matrix-badge" style="background:#fef3c7; color:#92400e;">C / R / U</span></td>
+            <td>-</td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/admin-user-management.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><code>admin-system-settings.html</code></td>
+            <td><strong>System Settings & AI SLA</strong> (Admin)</td>
+            <td><span class="matrix-badge" style="background:#dcfce7; color:#15803d;">C / R / U / D</span></td>
+            <td>Config Model</td>
+            <td>SV3</td>
+            <td style="text-align: right;"><a href="pages/admin-system-settings.html" class="btn btn-outline btn-sm">Truy cập</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer style="background: #0f172a; color: #94a3b8; padding: 3rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.08);">
+    <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem;">
+      <div>
+        <div style="font-weight: 800; font-size: 1.25rem; color: #ffffff; margin-bottom: 0.25rem;">
+          Onboard<span style="color: var(--secondary);">AI</span>
+        </div>
+        <div style="font-size: 0.85rem;">
+          Đề tài BTL-20 – Hành trình hội nhập nhân sự mới • CSE122
+        </div>
+      </div>
+      <div style="font-size: 0.8rem; text-align: right;">
+        <div>Nhóm thực hiện: 3 Sinh viên (SV1, SV2, SV3)</div>
+        <div>Mô hình phát triển: Git Branch Flow + PR Review + OBS Evidence</div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    function enterSystemQuick(role) {
+      StorageManager.switchRole(role);
+      const roleDefaultPages = {
+        newhire: "pages/newhire-onboarding-dashboard.html",
+        mentor: "pages/mentor-mentee-list.html",
+        hr: "pages/hr-journey-management.html",
+        admin: "pages/admin-department-management.html"
+      };
+      window.location.href = roleDefaultPages[role] || "pages/newhire-onboarding-dashboard.html";
+    }
+  </script>
+</body>
+</html>
+

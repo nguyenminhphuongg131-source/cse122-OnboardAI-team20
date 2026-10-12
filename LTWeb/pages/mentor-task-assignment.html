@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phân công Nhiệm vụ | OnboardAI</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar" id="app-topbar"></header>
+
+      <main class="page-content">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+              Quản trị & Phân công Nhiệm vụ (Task Assignment)
+            </h1>
+            <p class="page-subtitle">Thêm mới, tinh chỉnh đầu việc và gửi phản hồi nghiệm thu trực tiếp cho nhân sự mới</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="openCreateTaskModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Tạo nhiệm vụ mới (C)
+            </button>
+          </div>
+        </div>
+
+        <!-- Bộ chọn Mentee và Bộ lọc -->
+        <div class="filter-bar">
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+            <label style="font-weight: 600; font-size: 0.85rem;">Nhân sự nhận nhiệm vụ:</label>
+            <select class="form-control" style="width: 250px; padding: 0.45rem 0.75rem;" id="mentee-filter-select" onchange="renderAssignedTasks()">
+              <option value="all">Tất cả nhân sự mới</option>
+            </select>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <select class="form-control" style="width: 160px; padding: 0.45rem 0.75rem;" id="status-filter-select" onchange="renderAssignedTasks()">
+              <option value="all">Tất cả trạng thái</option>
+              <option value="pending">Đang chờ</option>
+              <option value="completed">Đã hoàn thành</option>
+            </select>
+            <input type="text" class="form-control" style="width: 200px; padding: 0.45rem 0.75rem;" placeholder="Tìm tên task..." id="task-search" onkeyup="renderAssignedTasks()" />
+          </div>
+        </div>
+
+        <!-- Bảng danh sách nhiệm vụ phân công (CRUD Table) -->
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nhiệm vụ & Mô tả</th>
+                <th>Người thực hiện</th>
+                <th>Giai đoạn</th>
+                <th>Độ ưu tiên</th>
+                <th>Hạn chót</th>
+                <th>Trạng thái</th>
+                <th>Phản hồi của Mentor</th>
+                <th style="text-align: right;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="assigned-tasks-tbody">
+              <!-- Render JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Tạo mới / Chỉnh sửa Nhiệm vụ (C/U) -->
+  <div class="modal-overlay" id="task-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="task-modal-title">Giao Nhiệm Vụ Mới Cho Nhân Sự</h3>
+        <button class="modal-close-btn" onclick="UI.closeModal('task-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="task-assignment-form">
+          <input type="hidden" id="task-edit-id" />
+
+          <div class="form-group">
+            <label class="form-label">Chọn Nhân sự nhận việc</label>
+            <select class="form-control" id="form-assign-mentee" required></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tên nhiệm vụ</label>
+            <input type="text" class="form-control" id="form-task-title" placeholder="Ví dụ: Hoàn tất tài liệu kiến trúc API User Story #408" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Mô tả chi tiết & Tiêu chí nghiệm thu (DoD)</label>
+            <textarea class="form-control" id="form-task-desc" rows="3" placeholder="Chi tiết yêu cầu, link tài liệu hoặc định dạng kết quả bàn giao..."></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Giai đoạn</label>
+              <select class="form-control" id="form-task-phase">
+                <option value="Ngày đầu tiên (Day 1)">Ngày đầu tiên (Day 1)</option>
+                <option value="Tuần đầu tiên (Week 1)">Tuần đầu tiên (Week 1)</option>
+                <option value="Tháng đầu tiên (Month 1)" selected>Tháng đầu tiên (Month 1)</option>
+                <option value="Tháng thứ hai (Month 2)">Tháng thứ hai (Month 2)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chuyên mục</label>
+              <select class="form-control" id="form-task-category">
+                <option value="Kỹ thuật">Kỹ thuật</option>
+                <option value="Hành chính & Nhân sự">Hành chính & Nhân sự</option>
+                <option value="Chính sách">Chính sách</option>
+                <option value="Mentorship">Mentorship</option>
+                <option value="Đánh giá">Đánh giá</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Mức độ ưu tiên</label>
+              <select class="form-control" id="form-task-priority">
+                <option value="low">Thấp (Low)</option>
+                <option value="medium" selected>Bình thường (Medium)</option>
+                <option value="high">Cao (High)</option>
+                <option value="urgent">Khẩn cấp (Urgent)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Hạn hoàn thành</label>
+              <input type="date" class="form-control" id="form-task-due" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nhận xét / Phản hồi của Mentor (Nghiệm thu)</label>
+            <input type="text" class="form-control" id="form-mentor-feedback" placeholder="Ghi nhận xét đánh giá khi mentee nộp kết quả..." />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="UI.closeModal('task-modal')">Hủy</button>
+        <button class="btn btn-primary" onclick="submitTaskAssignment()">Lưu nhiệm vụ</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.initLayout("mentor-task-assignment.html", "Phân công Nhiệm vụ");
+      populateMentees();
+
+      // Kiểm tra tham số query ?menteeId=...
+      const urlParams = new URLSearchParams(window.location.search);
+      const mId = urlParams.get("menteeId");
+      if (mId) {
+        document.getElementById("mentee-filter-select").value = mId;
+      }
+
+      renderAssignedTasks();
+    });
+
+    function populateMentees() {
+      const mentees = StorageManager.getNewHires();
+      const filterSelect = document.getElementById("mentee-filter-select");
+      const formSelect = document.getElementById("form-assign-mentee");
+
+      filterSelect.innerHTML = `<option value="all">Tất cả nhân sự mới</option>` + 
+        mentees.map(m => `<option value="${m.id}">${m.name} (${m.role})</option>`).join("");
+
+      formSelect.innerHTML = mentees.map(m => 
+        `<option value="${m.id}">${m.name} - ${m.role}</option>`
+      ).join("");
+    }
+
+    function renderAssignedTasks() {
+      const selectedMenteeId = document.getElementById("mentee-filter-select").value;
+      const statusVal = document.getElementById("status-filter-select").value;
+      const searchVal = document.getElementById("task-search").value.toLowerCase().trim();
+
+      let tasks = StorageManager.getTasks();
+      const mentees = StorageManager.getNewHires();
+
+      if (selectedMenteeId !== "all") {
+        tasks = tasks.filter(t => t.newHireId === selectedMenteeId);
+      }
+      if (statusVal !== "all") {
+        tasks = tasks.filter(t => t.status === statusVal);
+      }
+      if (searchVal) {
+        tasks = tasks.filter(t => 
+          t.title.toLowerCase().includes(searchVal) ||
+          t.description.toLowerCase().includes(searchVal)
+        );
+      }
+
+      const tbody = document.getElementById("assigned-tasks-tbody");
+
+      if (tasks.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 2.5rem 1rem; color: #64748b;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📋</div>
+              <div style="font-weight: 600;">Không có nhiệm vụ nào phù hợp</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = tasks.map(t => {
+        const assignedMentee = mentees.find(m => m.id === t.newHireId || m.userId === t.newHireId) || { name: "Chưa rõ" };
+        const statusBadge = t.status === "completed" 
+          ? `<span class="badge badge-success">✓ Hoàn thành</span>` 
+          : `<span class="badge badge-warning">⏳ Đang làm</span>`;
+
+        return `
+          <tr>
+            <td style="max-width: 280px;">
+              <div style="font-weight: 600; font-size: 0.9rem; color: var(--text-main);">${t.title}</div>
+              <div style="font-size: 0.785rem; color: var(--text-muted); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${t.description}</div>
+            </td>
+            <td>
+              <span style="font-weight: 600; font-size: 0.85rem;">${assignedMentee.name}</span>
+            </td>
+            <td>
+              <span class="badge badge-neutral" style="font-size: 0.7rem;">${t.phase}</span>
+            </td>
+            <td>
+              <span class="priority-pill priority-${t.priority}">${t.priority.toUpperCase()}</span>
+            </td>
+            <td>
+              <span style="font-size: 0.85rem;">${t.dueDate || 'Chưa đặt'}</span>
+            </td>
+            <td>${statusBadge}</td>
+            <td style="max-width: 180px;">
+              <span style="font-size: 0.785rem; color: #4f46e5;">${t.mentorFeedback || 'Chưa nhận xét'}</span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+                <button class="btn btn-outline btn-sm" onclick="editTaskModal('${t.id}')" title="Chỉnh sửa">
+                  ✏️ Sửa
+                </button>
+                <button class="btn btn-outline btn-sm" style="color: #ef4444;" onclick="deleteTaskAction('${t.id}')" title="Xóa">
+                  ✕ Xóa
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openCreateTaskModal() {
+      document.getElementById("task-modal-title").textContent = "Giao Nhiệm Vụ Mới";
+      document.getElementById("task-edit-id").value = "";
+      document.getElementById("task-assignment-form").reset();
+
+      const nextWeek = new Date();
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      document.getElementById("form-task-due").value = nextWeek.toISOString().split("T")[0];
+
+      // Nếu đang chọn mentee filter thì gán mặc định
+      const currentMentee = document.getElementById("mentee-filter-select").value;
+      if (currentMentee !== "all") {
+        document.getElementById("form-assign-mentee").value = currentMentee;
+      }
+
+      UI.openModal("task-modal");
+    }
+
+    function editTaskModal(taskId) {
+      const t = StorageManager.getTask(taskId);
+      if (!t) return;
+
+      document.getElementById("task-modal-title").textContent = "Chỉnh sửa Nhiệm vụ & Gửi Feedback";
+      document.getElementById("task-edit-id").value = t.id;
+      document.getElementById("form-assign-mentee").value = t.newHireId;
+      document.getElementById("form-task-title").value = t.title;
+      document.getElementById("form-task-desc").value = t.description;
+      document.getElementById("form-task-phase").value = t.phase;
+      document.getElementById("form-task-category").value = t.category;
+      document.getElementById("form-task-priority").value = t.priority;
+      document.getElementById("form-task-due").value = t.dueDate || "";
+      document.getElementById("form-mentor-feedback").value = t.mentorFeedback || "";
+
+      UI.openModal("task-modal");
+    }
+
+    function submitTaskAssignment() {
+      const editId = document.getElementById("task-edit-id").value;
+      const menteeId = document.getElementById("form-assign-mentee").value;
+      const title = document.getElementById("form-task-title").value.trim();
+      const desc = document.getElementById("form-task-desc").value.trim();
+      const phase = document.getElementById("form-task-phase").value;
+      const category = document.getElementById("form-task-category").value;
+      const priority = document.getElementById("form-task-priority").value;
+      const dueDate = document.getElementById("form-task-due").value;
+      const mentorFeedback = document.getElementById("form-mentor-feedback").value.trim();
+
+      if (!title || !dueDate) {
+        UI.showToast("Thiếu thông tin", "Vui lòng nhập tên nhiệm vụ và hạn hoàn thành.", "warning");
+        return;
+      }
+
+      if (editId) {
+        // Cập nhật (U)
+        StorageManager.updateTask(editId, {
+          newHireId: menteeId,
+          title,
+          description: desc,
+          phase,
+          category,
+          priority,
+          dueDate,
+          mentorFeedback
+        });
+        UI.showToast("Cập nhật thành công", "Đã lưu chỉnh sửa nhiệm vụ và phản hồi.", "success");
+      } else {
+        // Tạo mới (C)
+        StorageManager.addTask({
+          newHireId: menteeId,
+          title,
+          description: desc,
+          phase,
+          category,
+          priority,
+          dueDate,
+          mentorFeedback
+        });
+        UI.showToast("Giao việc thành công", "Đã gửi nhiệm vụ mới vào checklist của mentee!", "success");
+      }
+
+      UI.closeModal("task-modal");
+      renderAssignedTasks();
+    }
+
+    function deleteTaskAction(taskId) {
+      UI.showConfirm("Xóa nhiệm vụ", "Bạn có chắc chắn muốn xóa nhiệm vụ này khỏi hành trình của mentee?", () => {
+        StorageManager.deleteTask(taskId);
+        UI.showToast("Đã xóa", "Nhiệm vụ đã được gỡ bỏ và tiến độ đã được tính toán lại.", "info");
+        renderAssignedTasks();
+      });
+    }
+  </script>
+</body>
+</html>
+

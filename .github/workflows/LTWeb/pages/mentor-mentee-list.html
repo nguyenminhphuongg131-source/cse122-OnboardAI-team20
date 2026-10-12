@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh sách Mentee | OnboardAI</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar" id="app-topbar"></header>
+
+      <main class="page-content">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              Quản lý Nhân sự mới (Mentee List)
+            </h1>
+            <p class="page-subtitle">Theo dõi sát sao lộ trình hòa nhập, cảnh báo rủi ro trễ hạn và lịch check-in 1-on-1</p>
+          </div>
+          <div class="header-actions">
+            <a href="mentor-checkin-note.html" class="btn btn-outline">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              Ghi chép Check-in
+            </a>
+            <a href="mentor-task-assignment.html" class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Phân công nhiệm vụ mới
+            </a>
+          </div>
+        </div>
+
+        <!-- Cảnh báo Mentee trễ hạn (Nếu có) -->
+        <div class="card" id="mentee-risk-alert" style="background: #fff7ed; border-left: 5px solid #f97316; margin-bottom: 1.5rem; display: none;">
+          <div style="display: flex; align-items: flex-start; gap: 1rem;">
+            <div style="font-size: 1.5rem;">⚠️</div>
+            <div style="flex: 1;">
+              <h3 style="font-size: 1rem; font-weight: 700; color: #9a3412;">Phát hiện 01 Mentee cần can thiệp hỗ trợ sớm</h3>
+              <p style="font-size: 0.875rem; color: #7c2d12; margin-top: 2px;" id="risk-alert-text">
+                Nguyễn Văn An (Backend Intern) đã 14 ngày chưa có buổi check-in và tiến độ chỉ đạt 33%.
+              </p>
+            </div>
+            <a href="mentor-checkin-note.html" class="btn btn-sm btn-outline" style="border-color: #f97316; color: #9a3412;">
+              Lên lịch 1-on-1 ngay
+            </a>
+          </div>
+        </div>
+
+        <!-- Thống kê nhanh của Mentor -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrapper indigo">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-total-mentees">4</div>
+              <div class="stat-label">Tổng Mentee phụ trách</div>
+              <div class="stat-sub">Trên các phòng ban IT, MKT, Sales</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper emerald">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-normal-mentees">2</div>
+              <div class="stat-label">Đúng hạn & Vượt tiến độ</div>
+              <div class="stat-sub">Minh Anh, Thùy Trang</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper rose">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-risk-mentees">2</div>
+              <div class="stat-label">Cảnh báo / Cần hỗ trợ</div>
+              <div class="stat-sub">Văn An (Nguy cơ), Hải Đăng (Chờ tài khoản)</div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrapper cyan">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="stat-checkins-logged">4</div>
+              <div class="stat-label">Buổi Check-in đã ghi nhận</div>
+              <div class="stat-sub">Định kỳ 1 lần/2 tuần</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bộ lọc Mentee -->
+        <div class="filter-bar">
+          <div class="filter-pills" id="risk-filters">
+            <button class="filter-pill active" data-risk="all" onclick="setRiskFilter('all')">Tất cả nhân sự mới</button>
+            <button class="filter-pill" data-risk="normal" onclick="setRiskFilter('normal')">Tiến độ tốt</button>
+            <button class="filter-pill" data-risk="warning" onclick="setRiskFilter('warning')">Hơi chậm (Warning)</button>
+            <button class="filter-pill" data-risk="critical" onclick="setRiskFilter('critical')">Nguy cơ cao (Critical)</button>
+          </div>
+
+          <div style="display: flex; gap: 0.75rem; align-items: center; flex: 1; justify-content: flex-end; min-width: 280px;">
+            <select class="form-control" style="width: 200px; padding: 0.45rem 0.75rem;" id="dept-filter" onchange="renderMentees()">
+              <option value="all">Tất cả phòng ban</option>
+              <option value="Công nghệ thông tin (IT)">Công nghệ thông tin</option>
+              <option value="Tiếp thị & Truyền thông">Tiếp thị & Truyền thông</option>
+              <option value="Kinh doanh & Bán hàng">Kinh doanh & Bán hàng</option>
+            </select>
+            <input type="text" class="form-control" style="max-width: 220px; padding: 0.45rem 0.75rem;" placeholder="Tìm tên nhân sự..." id="mentee-search-input" onkeyup="renderMentees()" />
+          </div>
+        </div>
+
+        <!-- Bảng danh sách Mentee -->
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nhân sự mới</th>
+                <th>Phòng ban & Vị trí</th>
+                <th>Người hướng dẫn</th>
+                <th style="width: 180px;">Tiến độ Checklist</th>
+                <th>Ngày bắt đầu</th>
+                <th>Check-in gần nhất</th>
+                <th>Trạng thái</th>
+                <th style="text-align: right;">Hành động</th>
+              </tr>
+            </thead>
+            <tbody id="mentees-table-body">
+              <!-- Sẽ kết xuất bằng JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Xem Chi tiết Hồ sơ Mentee -->
+  <div class="modal-overlay" id="mentee-detail-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-mentee-name">Hồ sơ Nhân sự mới</h3>
+        <button class="modal-close-btn" onclick="UI.closeModal('mentee-detail-modal')">✕</button>
+      </div>
+      <div class="modal-body" id="modal-mentee-content">
+        <!-- Chi tiết mentee -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="UI.closeModal('mentee-detail-modal')">Đóng</button>
+        <a href="mentor-checkin-note.html" class="btn btn-primary">Lên lịch Check-in 1-on-1</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    let currentRiskFilter = "all";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.initLayout("mentor-mentee-list.html", "Danh sách Nhân sự mới (Mentee List)");
+      renderMentees();
+    });
+
+    function setRiskFilter(risk) {
+      currentRiskFilter = risk;
+      document.querySelectorAll("#risk-filters .filter-pill").forEach(p => {
+        p.classList.toggle("active", p.getAttribute("data-risk") === risk);
+      });
+      renderMentees();
+    }
+
+    function renderMentees() {
+      let mentees = StorageManager.getNewHires();
+      const deptVal = document.getElementById("dept-filter").value;
+      const searchVal = document.getElementById("mentee-search-input").value.toLowerCase().trim();
+
+      // Kiểm tra xem có mentee nào bị critical để hiển thị cảnh báo
+      const criticalMentee = mentees.find(m => m.riskStatus === "critical");
+      const alertBox = document.getElementById("mentee-risk-alert");
+      if (criticalMentee && alertBox) {
+        alertBox.style.display = "block";
+        document.getElementById("risk-alert-text").textContent = 
+          `${criticalMentee.name} (${criticalMentee.role}): ${criticalMentee.riskReason}`;
+      }
+
+      // Bộ lọc
+      if (currentRiskFilter !== "all") {
+        mentees = mentees.filter(m => m.riskStatus === currentRiskFilter);
+      }
+      if (deptVal !== "all") {
+        mentees = mentees.filter(m => m.department === deptVal);
+      }
+      if (searchVal) {
+        mentees = mentees.filter(m => 
+          m.name.toLowerCase().includes(searchVal) || 
+          m.email.toLowerCase().includes(searchVal) ||
+          m.role.toLowerCase().includes(searchVal)
+        );
+      }
+
+      const tbody = document.getElementById("mentees-table-body");
+
+      if (mentees.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 2.5rem 1rem; color: #64748b;">
+              <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">🔍</div>
+              <div style="font-weight: 600;">Không tìm thấy nhân sự phù hợp với bộ lọc</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = mentees.map(m => {
+        let statusBadge = `<span class="badge badge-success">✓ Đúng tiến độ</span>`;
+        if (m.riskStatus === "warning") {
+          statusBadge = `<span class="badge badge-warning">⏳ Cần lưu ý</span>`;
+        } else if (m.riskStatus === "critical") {
+          statusBadge = `<span class="badge badge-danger">⚠️ Nguy cơ chậm</span>`;
+        }
+
+        let progressClass = "";
+        if (m.progressPercent >= 70) progressClass = "success";
+        else if (m.progressPercent >= 40) progressClass = "warning";
+        else progressClass = "danger";
+
+        return `
+          <tr>
+            <td>
+              <div class="user-cell">
+                <img src="${m.avatar}" alt="${m.name}" />
+                <div class="user-cell-meta">
+                  <div class="name">${m.name}</div>
+                  <div class="email">${m.email}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div style="font-weight: 600; font-size: 0.85rem;">${m.role}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">${m.department}</div>
+            </td>
+            <td>
+              <div style="font-size: 0.85rem; font-weight: 500;">${m.mentorName}</div>
+            </td>
+            <td>
+              <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 3px;">
+                <span style="font-weight: 700;">${m.progressPercent}%</span>
+                <span style="color: var(--text-muted);">${m.completedTasks}/${m.totalTasks}</span>
+              </div>
+              <div class="progress-container" style="height: 6px;">
+                <div class="progress-bar-fill ${progressClass}" style="width: ${m.progressPercent}%;"></div>
+              </div>
+            </td>
+            <td>
+              <span style="font-size: 0.85rem;">${m.startDate}</span>
+            </td>
+            <td>
+              <span style="font-size: 0.85rem; font-weight: 500;">${m.lastCheckinDate}</span>
+            </td>
+            <td>${statusBadge}</td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 0.4rem; justify-content: flex-end;">
+                <button class="btn btn-outline btn-sm" onclick="openMenteeDetail('${m.id}')" title="Xem hồ sơ">
+                  Chi tiết
+                </button>
+                <a href="mentor-task-assignment.html?menteeId=${m.id}" class="btn btn-outline btn-sm" title="Giao nhiệm vụ">
+                  + Task
+                </a>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function openMenteeDetail(menteeId) {
+      const mentee = StorageManager.getNewHire(menteeId);
+      if (!mentee) return;
+
+      document.getElementById("modal-mentee-name").textContent = `Hồ sơ: ${mentee.name}`;
+      
+      const content = document.getElementById("modal-mentee-content");
+      content.innerHTML = `
+        <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.25rem;">
+          <img src="${mentee.avatar}" style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary);" />
+          <div>
+            <div style="font-size: 1.15rem; font-weight: 700;">${mentee.name}</div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">${mentee.role} • ${mentee.department}</div>
+            <div style="font-size: 0.8rem; color: var(--primary);">Email: ${mentee.email}</div>
+          </div>
+        </div>
+
+        <div style="background: #f8fafc; padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 1rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.85rem;">
+            <div><strong>Ngày nhận việc:</strong> ${mentee.startDate}</div>
+            <div><strong>Thời gian thử việc:</strong> ${mentee.probationDays} ngày</div>
+            <div><strong>Tiến độ hoàn thành:</strong> ${mentee.progressPercent}% (${mentee.completedTasks}/${mentee.totalTasks} tasks)</div>
+            <div><strong>Check-in gần nhất:</strong> ${mentee.lastCheckinDate}</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phân tích rủi ro & Tình trạng hòa nhập</label>
+          <div style="font-size: 0.85rem; color: #475569; background: #fff; border: 1px dashed var(--border-color); padding: 0.75rem; border-radius: var(--radius-md);">
+            ${mentee.riskReason}
+          </div>
+        </div>
+      `;
+
+      UI.openModal("mentee-detail-modal");
+    }
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cấu hình Hệ thống & AI | OnboardAI</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar" id="app-topbar"></header>
+
+      <main class="page-content">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+              Cấu hình Hệ thống & Tham số AI SLA
+            </h1>
+            <p class="page-subtitle">Thiết lập các ngưỡng cảnh báo thời gian thử việc, chu kỳ 1-on-1 bắt buộc và bộ tham số mô hình AI</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-outline" onclick="exportDatabaseJson()">
+              📥 Xuất bản sao lưu (JSON)
+            </button>
+            <button type="button" class="btn btn-primary" onclick="saveSystemSettings()">
+              💾 Lưu toàn bộ thiết lập
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 1.5rem;" class="dashboard-split">
+          
+          <!-- Cột trái: Cấu hình chung & Quy định Onboarding -->
+          <div>
+            <!-- Form thông tin doanh nghiệp -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                  Thông tin Doanh nghiệp & Ứng dụng
+                </h2>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Tên tổ chức / Tập đoàn</label>
+                <input type="text" class="form-control" id="cfg-company-name" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Tên sản phẩm Onboarding hiển thị</label>
+                <input type="text" class="form-control" id="cfg-system-name" />
+              </div>
+            </div>
+            <!-- Cấu hình Email -->
+<div class="card" style="margin-bottom: 1.5rem;">
+  <div class="card-header">
+    <h2 class="card-title">Cấu hình Email</h2>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="cfg-hr-contact-email">Email liên hệ HR</label>
+    <input
+      type="email"
+      class="form-control"
+      id="cfg-hr-contact-email"
+      placeholder="hr@techcorp.vn"
+    />
+    <div class="form-help">Địa chỉ để nhân viên liên hệ HR khi cần hỗ trợ.</div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="cfg-notification-email">Email gửi thông báo</label>
+    <input
+      type="email"
+      class="form-control"
+      id="cfg-notification-email"
+      placeholder="no-reply@techcorp.vn"
+    />
+    <div class="form-help">Đây là cấu hình mô phỏng; ứng dụng chưa gửi email thật.</div>
+  </div>
+</div>
+
+<!-- Tham số SLA Thử việc -->
+            <div class="card" style="margin-bottom: 1.5rem;">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  Quy chuẩn SLA & Ngưỡng Cảnh báo Tự động
+                </h2>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Thời hạn thử việc mặc định (Ngày)</label>
+                  <input type="number" class="form-control" id="cfg-probation-days" min="30" max="180" />
+                  <div class="form-help">Tiêu chuẩn: 60 ngày cho khối văn phòng & kỹ sư.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Ngưỡng cảnh báo Check-in (Ngày không gặp)</label>
+                  <input type="number" class="form-control" id="cfg-checkin-days" min="3" max="30" />
+                  <div class="form-help">Báo động khi quá 7 ngày chưa có 1-on-1.</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Ngưỡng rủi ro tiến độ Checklist (% hoàn thành tối thiểu)</label>
+                <input type="number" class="form-control" id="cfg-risk-threshold" min="10" max="90" />
+                <div class="form-help">Nếu tiến độ dưới 50% sau 30 ngày sẽ gắn cờ Critical.</div>
+              </div>
+            </div>
+
+            <!-- Cấu hình Mô hình Trí tuệ Nhân tạo AI -->
+            <div class="card ai-card">
+              <div class="ai-header-badge">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path></svg>
+                Cấu hình Động cơ AI (AI Engine Settings)
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Mô hình AI đang vận hành</label>
+                <select class="form-control" id="cfg-ai-model">
+                  <option value="Gemini 1.5 Pro / Flash (Mô phỏng Frontend chuẩn BTL)">Gemini 1.5 Flash (Frontend Engine Tối ưu)</option>
+                  <option value="GPT-4o Mini Simulated Core">GPT-4o Mini Simulated Core</option>
+                  <option value="Local RAG Semantic Search Engine">Local RAG Semantic Search Engine</option>
+                </select>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="form-group">
+                  <label class="form-label">Nhiệt độ sáng tạo (Temperature)</label>
+                  <input type="number" step="0.1" min="0" max="1" class="form-control" id="cfg-ai-temp" />
+                  <div class="form-help">Mặc định 0.3 để câu trả lời chính xác, bám sát tài liệu.</div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Thời gian mô phỏng suy nghĩ (ms)</label>
+                  <input type="number" class="form-control" id="cfg-ai-latency" value="800" />
+                  <div class="form-help">Độ trễ thể hiện trạng thái loading / typing.</div>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Khóa API Thực (Tùy chọn - nếu gọi trực tiếp Gemini/OpenAI)</label>
+                <input type="password" class="form-control" id="cfg-ai-apikey" placeholder="AIzaSy... (Để trống nếu dùng bộ giả lập chuẩn)" />
+                <div class="form-help">Theo mục 13 đề tài CSE122: Không bắt buộc máy chủ hay API thật.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cfg-ai-prompt">Prompt hệ thống AI</label>
+                <textarea
+                 class="form-control"
+                 id="cfg-ai-prompt"
+                 rows="5"
+                 placeholder="Nhập hướng dẫn chung cho trợ lý AI..."
+                 ></textarea>
+              <div class="form-help">Hướng dẫn chung dùng cho các tính năng AI trong bản mô phỏng.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cột phải: Quản trị Dữ liệu & Trạng thái Khôi phục -->
+          <div>
+            <!-- Card Quản trị Dữ liệu & Đặt lại -->
+            <div class="card" style="margin-bottom: 1.5rem; border-color: #fecaca;">
+              <div class="card-header" style="border-bottom-color: #fee2e2;">
+                <h2 class="card-title" style="color: #991b1b;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                  Vùng Nguy Hiểm & Khôi Phục Dữ Liệu
+                </h2>
+              </div>
+              <p style="font-size: 0.85rem; color: #7f1d1d; line-height: 1.5; margin-bottom: 1.25rem;">
+                Nếu bạn muốn đưa toàn bộ hệ thống về trạng thái ban đầu để kiểm thử hoặc bảo vệ đồ án:
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-outline" style="border-color: #fca5a5; color: #b91c1c;" onclick="handleResetDatabase()">
+                  🔄 Khôi phục Cơ sở Dữ liệu Mẫu Ban đầu
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="clearLocalStorageAll()">
+                  🗑️ Xóa toàn bộ bộ nhớ Cache trình duyệt
+                </button>
+              </div>
+            </div>
+
+            <!-- Card Trạng thái Hệ thống -->
+            <div class="card">
+              <div class="card-header">
+                <h2 class="card-title">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                  Thông tin Phiên bản & Môi trường
+                </h2>
+              </div>
+              <div style="font-size: 0.85rem; color: #475569; display: flex; flex-direction: column; gap: 0.5rem;">
+                <div><strong>Học phần:</strong> Phát triển Ứng dụng Web - CSE122</div>
+                <div><strong>Đề tài:</strong> BTL-20 – OnboardAI</div>
+                <div><strong>Kiến trúc:</strong> Frontend Web Application (HTML5 / Modern JS / CSS3)</div>
+                <div><strong>Lưu trữ:</strong> LocalStorage Reactive Event Bus</div>
+                <div><strong>Trạng thái AI:</strong> 3 Features (AI-1, AI-2, AI-3) sẵn sàng</div>
+                <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed var(--border-color); font-size: 0.75rem; color: var(--text-light);">
+                  Bản dựng Release v1.0.4 • TechCorp Internal
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/ai-engine.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.initLayout("admin-system-settings.html", "Cấu hình Hệ thống & Tham số AI");
+      loadSettingsToForm();
+    });
+
+    function loadSettingsToForm() {
+      const cfg = StorageManager.getSettings();
+      document.getElementById("cfg-company-name").value = cfg.companyName || "TechCorp Vietnam Technology Group";
+      document.getElementById("cfg-system-name").value = cfg.systemName || "OnboardAI Enterprise Platform";
+      document.getElementById("cfg-hr-contact-email").value = cfg.hrContactEmail || "hr@techcorp.vn";
+      document.getElementById("cfg-notification-email").value = cfg.notificationEmail || "no-reply@techcorp.vn";
+      document.getElementById("cfg-probation-days").value = cfg.defaultProbationDays || 60;
+      document.getElementById("cfg-checkin-days").value = cfg.checkinWarningThresholdDays || 7;
+      document.getElementById("cfg-risk-threshold").value = cfg.riskThresholdPercent || 50;
+      document.getElementById("cfg-ai-temp").value = cfg.aiTemperature || 0.3;
+      document.getElementById("cfg-ai-latency").value = AIEngine.config.latencyMs || 800;
+      document.getElementById("cfg-ai-prompt").value = cfg.aiPrompt || "";
+    }
+
+    function saveSystemSettings() {
+      const companyName = document.getElementById("cfg-company-name").value.trim();
+      const systemName = document.getElementById("cfg-system-name").value.trim();
+      const hrContactEmail = document.getElementById("cfg-hr-contact-email").value.trim();
+      const notificationEmail = document.getElementById("cfg-notification-email").value.trim();
+      const aiPrompt = document.getElementById("cfg-ai-prompt").value.trim();
+      const probationDays = parseInt(document.getElementById("cfg-probation-days").value, 10);
+      const checkinDays = parseInt(document.getElementById("cfg-checkin-days").value, 10);
+      const riskPct = parseInt(document.getElementById("cfg-risk-threshold").value, 10);
+      const aiTemp = parseFloat(document.getElementById("cfg-ai-temp").value);
+      const aiLatency = parseInt(document.getElementById("cfg-ai-latency").value, 10);
+
+      AIEngine.config.latencyMs = aiLatency;
+
+      StorageManager.updateSettings({
+        companyName,
+        systemName,
+        hrContactEmail,
+        notificationEmail,
+        aiPrompt,
+        defaultProbationDays: probationDays,
+        checkinWarningThresholdDays: checkinDays,
+        riskThresholdPercent: riskPct,
+        aiTemperature: aiTemp
+      });
+
+      UI.showToast("Đã lưu thiết lập", "Toàn bộ cấu hình hệ thống và tham số AI đã được cập nhật thành công.", "success");
+    }
+
+    function handleResetDatabase() {
+      UI.showConfirm(
+        "Xác nhận Khôi phục Mẫu",
+        "Thao tác này sẽ tải lại dữ liệu mẫu gốc ban đầu (4 roles, 4 mentees, tasks, checkins). Bạn có chắc chắn không?",
+        () => {
+          StorageManager.resetToDefaults();
+          UI.showToast("Khôi phục thành công", "Cơ sở dữ liệu mẫu ban đầu đã được tái tạo!", "success");
+          setTimeout(() => location.reload(), 600);
+        }
+      );
+    }
+
+    function clearLocalStorageAll() {
+      UI.showConfirm(
+        "Xóa bộ nhớ Cache",
+        "Xóa sạch toàn bộ LocalStorage của trình duyệt và khởi động lại ứng dụng.",
+        () => {
+          localStorage.clear();
+          StorageManager.init();
+          UI.showToast("Đã dọn sạch", "Bộ nhớ cục bộ đã được xóa.", "info");
+          setTimeout(() => location.reload(), 600);
+        }
+      );
+    }
+
+    function exportDatabaseJson() {
+      const db = StorageManager.getDB();
+      const blob = new Blob([JSON.stringify(db, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `onboardai_backup_${new Date().toISOString().split("T")[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      UI.showToast("Xuất bản sao lưu", "Đã tải xuống tệp dữ liệu JSON của hệ thống.", "success");
+    }
+  </script>
+</body>
+</html>
+

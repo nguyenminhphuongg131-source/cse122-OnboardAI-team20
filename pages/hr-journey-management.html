@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiết kế Lộ trình Hội nhập (AI-2) | OnboardAI</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar" id="app-topbar"></header>
+
+      <main class="page-content">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <div class="ai-header-badge">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path></svg>
+              Tính năng AI-2: Checklist Personalizer
+            </div>
+            <h1 class="page-title">
+              Thiết kế Lộ trình Hội nhập (Journey Management)
+            </h1>
+            <p class="page-subtitle">Quản lý các khuôn mẫu hành trình chuẩn và sử dụng AI sinh checklist cá nhân hóa theo từng vị trí & cấp bậc</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-ai" onclick="openAiPersonalizerModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"></path></svg>
+              Tạo Lộ trình Bằng AI (AI-2)
+            </button>
+            <button class="btn btn-outline" onclick="openAddJourneyModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Tạo thủ công
+            </button>
+          </div>
+        </div>
+
+        <!-- Danh sách các khuôn mẫu Lộ trình hiện có (Journeys Grid) -->
+        <div style="margin-bottom: 2rem;">
+          <h2 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>📚</span> Các Lộ trình Tiêu chuẩn Đang Áp Dụng (<span id="journeys-count">3</span>)
+          </h2>
+          <div id="journeys-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;">
+            <!-- Sẽ render bằng JS -->
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal AI Personalizer (AI-2: Tạo Lộ trình Thích Ứng Bằng AI) -->
+  <div class="modal-overlay" id="ai-personalizer-modal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.25rem;">✨</span>
+          <h3>AI Checklist Personalizer (AI-2)</h3>
+        </div>
+        <button class="modal-close-btn" onclick="UI.closeModal('ai-personalizer-modal')">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Bước 1: Form nhập tiêu chí -->
+        <div id="ai-step-input">
+          <p style="font-size: 0.9rem; color: #475569; margin-bottom: 1.25rem;">
+            Cung cấp thông tin vị trí tuyển dụng. AI sẽ phân tích bộ kỹ năng và sinh ra checklist 4 giai đoạn thích ứng riêng biệt.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Phòng ban</label>
+              <select class="form-control" id="ai-dept-select">
+                <option value="Công nghệ thông tin (IT)">Công nghệ thông tin (IT)</option>
+                <option value="Tiếp thị & Truyền thông">Tiếp thị & Truyền thông</option>
+                <option value="Kinh doanh & Bán hàng">Kinh doanh & Bán hàng</option>
+                <option value="Tài chính & Kế toán">Tài chính & Kế toán</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cấp bậc (Seniority)</label>
+              <select class="form-control" id="ai-seniority-select">
+                <option value="Intern">Thực tập sinh (Intern)</option>
+                <option value="Junior" selected>Nhân viên mới (Junior)</option>
+                <option value="Mid-level">Chuyên viên (Mid-level)</option>
+                <option value="Senior">Chuyên gia / Lead (Senior)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Chức danh công việc cụ thể</label>
+            <input type="text" class="form-control" id="ai-role-title" placeholder="Ví dụ: AI Engineer, QA Automation, UI/UX Designer..." value="Frontend Engineer" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Thời hạn lộ trình (Ngày)</label>
+            <input type="number" class="form-control" id="ai-duration-days" value="60" />
+          </div>
+
+          <div style="text-align: right; margin-top: 1.5rem;">
+            <button class="btn btn-ai" onclick="runAiChecklistGeneration()">
+              🚀 Bắt đầu Phân tích & Sinh Lộ Trình
+            </button>
+          </div>
+        </div>
+
+        <!-- Bước 2: Trạng thái Loading / Đang suy luận -->
+        <div id="ai-step-loading" style="display: none; text-align: center; padding: 2.5rem 1rem;">
+          <div class="ai-pulse-dot" style="margin: 0 auto 1.25rem;">✨</div>
+          <h4 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 0.4rem;">AI đang xây dựng lộ trình thích ứng...</h4>
+          <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 1.5rem;">
+            Đang tối ưu các mốc bàn giao công việc theo cấp bậc và giảm thiểu thời gian hòa nhập văn hóa...
+          </p>
+          <div class="progress-container" style="max-width: 300px; margin: 0 auto;">
+            <div class="progress-bar-fill" style="width: 80%; animation: pulse-ring 1s infinite;"></div>
+          </div>
+        </div>
+
+        <!-- Bước 3: Kết quả AI sinh ra kèm Giải thích và Nút kiểm soát -->
+        <div id="ai-step-result" style="display: none;">
+          <div class="badge badge-success" style="margin-bottom: 0.75rem;">✓ AI đã sinh thành công 6 nhiệm vụ cốt lõi</div>
+
+          <!-- Khối giải thích Vì sao có kết quả này -->
+          <div style="background: #faf5ff; border: 1px solid #e9d5ff; border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.85rem; color: #581c87; margin-bottom: 1.25rem;" id="ai-explanation-box">
+            <!-- Giải thích -->
+          </div>
+
+          <!-- Danh sách nhiệm vụ đề xuất -->
+          <div id="ai-generated-tasks-list" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 1.25rem;">
+            <!-- Render task cards -->
+          </div>
+
+          <!-- Nút kiểm soát người dùng: Chấp nhận / Sửa / Từ chối / Tạo lại -->
+          <div class="ai-action-controls" style="margin-top: 0; padding-top: 0;">
+            <button class="btn btn-primary" onclick="acceptAiJourney()">
+              💾 Chấp nhận & Lưu thành Lộ trình Mới
+            </button>
+            <button class="btn btn-outline" onclick="runAiChecklistGeneration()">
+              🔄 Thử lại (Regenerate)
+            </button>
+            <button class="btn btn-outline" style="color: #ef4444;" onclick="resetAiModal()">
+              ✕ Hủy bỏ
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Tạo/Sửa Lộ trình Thủ công -->
+  <div class="modal-overlay" id="journey-manual-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="manual-modal-title">Tạo Lộ Trình Thủ Công</h3>
+        <button class="modal-close-btn" onclick="UI.closeModal('journey-manual-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="journey-manual-form">
+          <input type="hidden" id="journey-edit-id" />
+          <div class="form-group">
+            <label class="form-label">Tên lộ trình</label>
+            <input type="text" class="form-control" id="manual-j-name" placeholder="Ví dụ: Hành trình Chuyên viên Tuyển dụng (HR Recruiter)" required />
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Phòng ban</label>
+              <select class="form-control" id="manual-j-dept">
+                <option value="Công nghệ thông tin (IT)">Công nghệ thông tin (IT)</option>
+                <option value="Nhân sự & Đào tạo">Nhân sự & Đào tạo</option>
+                <option value="Tiếp thị & Truyền thông">Tiếp thị & Truyền thông</option>
+                <option value="Kinh doanh & Bán hàng">Kinh doanh & Bán hàng</option>
+                <option value="Tài chính & Kế toán">Tài chính & Kế toán</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Vị trí mục tiêu</label>
+              <input type="text" class="form-control" id="manual-j-role" placeholder="Ví dụ: HR Specialist" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mô tả tóm tắt</label>
+            <textarea class="form-control" id="manual-j-desc" rows="3" placeholder="Mục tiêu của lộ trình này giúp nhân sự đạt được điều gì..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="UI.closeModal('journey-manual-modal')">Hủy</button>
+        <button class="btn btn-primary" onclick="submitManualJourney()">Lưu lộ trình</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/ai-engine.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    let generatedAiResult = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.initLayout("hr-journey-management.html", "Thiết kế Lộ trình Hội nhập (AI-2)");
+      renderJourneys();
+    });
+
+    function renderJourneys() {
+      const journeys = StorageManager.getJourneys();
+      document.getElementById("journeys-count").textContent = journeys.length;
+
+      const grid = document.getElementById("journeys-grid");
+      if (journeys.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-icon">🧭</div>
+            <div class="empty-title">Chưa có khuôn mẫu lộ trình nào</div>
+            <p class="empty-desc">Tạo lộ trình chuẩn hoặc bấm "Tạo Lộ trình Bằng AI" để hệ thống tự động thiết lập.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = journeys.map(j => `
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <span class="badge badge-info">${j.department}</span>
+              <span class="badge badge-neutral">${j.durationDays} Ngày</span>
+            </div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem;">${j.name}</h3>
+            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.4; margin-bottom: 1rem;">
+              ${j.description}
+            </p>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-light); padding-top: 0.85rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.785rem; color: var(--text-muted);">
+              📋 ${j.phasesCount || 4} Giai đoạn • ${j.tasksCount || 10} Tasks
+            </span>
+            <div style="display: flex; gap: 0.35rem;">
+              <button class="btn btn-outline btn-sm" onclick="editJourney('${j.id}')">Sửa</button>
+              <button class="btn btn-outline btn-sm" style="color: #ef4444;" onclick="deleteJourneyAction('${j.id}')">Xóa</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // --- AI-2 FLOW LOGIC ---
+    function openAiPersonalizerModal() {
+      resetAiModal();
+      UI.openModal("ai-personalizer-modal");
+    }
+
+    function resetAiModal() {
+      document.getElementById("ai-step-input").style.display = "block";
+      document.getElementById("ai-step-loading").style.display = "none";
+      document.getElementById("ai-step-result").style.display = "none";
+      generatedAiResult = null;
+    }
+
+    async function runAiChecklistGeneration() {
+      const dept = document.getElementById("ai-dept-select").value;
+      const seniority = document.getElementById("ai-seniority-select").value;
+      const roleTitle = document.getElementById("ai-role-title").value.trim();
+
+      if (!roleTitle) {
+        UI.showToast("Thiếu thông tin", "Vui lòng nhập chức danh chuyên môn.", "warning");
+        return;
+      }
+
+      document.getElementById("ai-step-input").style.display = "none";
+      document.getElementById("ai-step-loading").style.display = "block";
+      document.getElementById("ai-step-result").style.display = "none";
+
+      try {
+        const res = await AIEngine.generatePersonalizedChecklist({
+          department: dept,
+          roleTitle: roleTitle,
+          seniority: seniority
+        });
+
+        generatedAiResult = res;
+
+        document.getElementById("ai-step-loading").style.display = "none";
+        document.getElementById("ai-step-result").style.display = "block";
+
+        document.getElementById("ai-explanation-box").innerHTML = `
+          <strong>💡 Vì sao AI đề xuất danh sách này?</strong><br>
+          ${res.explanation}
+        `;
+
+        const listEl = document.getElementById("ai-generated-tasks-list");
+        listEl.innerHTML = res.tasks.map(t => `
+          <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+              <span class="badge badge-neutral" style="font-size: 0.7rem;">${t.phase}</span>
+              <span class="priority-pill priority-${t.priority}">${t.priority.toUpperCase()}</span>
+            </div>
+            <div style="font-weight: 600; font-size: 0.85rem; color: #1e293b; margin-bottom: 0.25rem;">${t.title}</div>
+            <div style="font-size: 0.75rem; color: #64748b;">🎯 <em>${t.reason}</em></div>
+          </div>
+        `).join("");
+
+      } catch (err) {
+        UI.showToast("Lỗi", err.message, "danger");
+        resetAiModal();
+      }
+    }
+
+    function acceptAiJourney() {
+      if (!generatedAiResult) return;
+
+      const meta = generatedAiResult.metadata;
+      StorageManager.addJourney({
+        name: `Lộ trình ${meta.roleTitle} (${meta.seniority})`,
+        department: meta.department,
+        targetRole: meta.roleTitle,
+        durationDays: 60,
+        phasesCount: 4,
+        tasksCount: generatedAiResult.tasks.length,
+        description: `Lộ trình cá nhân hóa do AI sinh ngày ${meta.generatedAt}, tối ưu cho cấp bậc ${meta.seniority}.`
+      });
+
+      UI.closeModal("ai-personalizer-modal");
+      UI.showToast("Thành công", "Đã lưu lộ trình AI vào danh mục chuẩn!", "success");
+      renderJourneys();
+    }
+
+    // --- CRUD THỦ CÔNG ---
+    function openAddJourneyModal() {
+      document.getElementById("manual-modal-title").textContent = "Tạo Lộ Trình Mới";
+      document.getElementById("journey-edit-id").value = "";
+      document.getElementById("journey-manual-form").reset();
+      UI.openModal("journey-manual-modal");
+    }
+
+    function editJourney(id) {
+      const j = StorageManager.getJourneys().find(item => item.id === id);
+      if (!j) return;
+
+      document.getElementById("manual-modal-title").textContent = "Chỉnh sửa Lộ Trình";
+      document.getElementById("journey-edit-id").value = j.id;
+      document.getElementById("manual-j-name").value = j.name;
+      document.getElementById("manual-j-dept").value = j.department;
+      document.getElementById("manual-j-role").value = j.targetRole || "";
+      document.getElementById("manual-j-desc").value = j.description;
+
+      UI.openModal("journey-manual-modal");
+    }
+
+    function submitManualJourney() {
+      const editId = document.getElementById("journey-edit-id").value;
+      const name = document.getElementById("manual-j-name").value.trim();
+      const dept = document.getElementById("manual-j-dept").value;
+      const role = document.getElementById("manual-j-role").value.trim();
+      const desc = document.getElementById("manual-j-desc").value.trim();
+
+      if (!name) {
+        UI.showToast("Thiếu thông tin", "Vui lòng nhập tên lộ trình.", "warning");
+        return;
+      }
+
+      if (editId) {
+        StorageManager.updateJourney(editId, { name, department: dept, targetRole: role, description: desc });
+        UI.showToast("Cập nhật", "Đã lưu thay đổi cho lộ trình.", "success");
+      } else {
+        StorageManager.addJourney({ name, department: dept, targetRole: role, description: desc });
+        UI.showToast("Tạo mới", "Đã tạo lộ trình hội nhập thành công.", "success");
+      }
+
+      UI.closeModal("journey-manual-modal");
+      renderJourneys();
+    }
+
+    function deleteJourneyAction(id) {
+      UI.showConfirm("Xóa lộ trình", "Bạn có chắc muốn xóa khuôn mẫu lộ trình này?", () => {
+        StorageManager.deleteJourney(id);
+        UI.showToast("Đã xóa", "Lộ trình đã được gỡ bỏ.", "info");
+        renderJourneys();
+      });
+    }
+  </script>
+</body>
+</html>
+

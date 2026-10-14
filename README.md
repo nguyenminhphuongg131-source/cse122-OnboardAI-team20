@@ -53,18 +53,18 @@ Hệ thống hỗ trợ cơ chế **chuyển đổi vai trò tức thì** trên 
 
 | # | Giao diện | Tệp HTML | Vai trò | CRUD | Tính năng AI | Người phụ trách |
 |:---:|---|---|:---:|:---:|:---:|:---:|
-| 1 | Onboarding Dashboard | `pages/newhire-onboarding-dashboard.html` | Nhân sự mới | R | Gợi ý tiến độ | SV1 |
-| 2 | Checklist Hội nhập | `pages/newhire-checklist.html` | Nhân sự mới | C / R / U | - | SV1 |
-| 3 | AI Help: Hỏi đáp Chính sách | `pages/newhire-ai-help.html` | Nhân sự mới | C / R / U / D | **AI-1: Policy Q&A** | SV1 |
-| 4 | Mentee List & Cảnh báo | `pages/mentor-mentee-list.html` | Mentor | R | Cảnh báo trễ | SV2 |
-| 5 | Checkin Note 1-on-1 | `pages/mentor-checkin-note.html` | Mentor | C / R / U / D | - | SV2 |
-| 6 | Task Assignment | `pages/mentor-task-assignment.html` | Mentor | C / R / U / D | Đồng bộ phản hồi | SV2 |
-| 7 | Journey Management | `pages/hr-journey-management.html` | HR | C / R / U / D | **AI-2: Personalizer** | SV3 |
-| 8 | Document Library | `pages/hr-document-library.html` | HR | C / R / U / D | Tri thức RAG | SV3 |
-| 9 | HR Dashboard & Analytics | `pages/hr-dashboard.html` | HR | C / R / U / D | **AI-3: Progress Risk** | SV3 |
-| 10 | Department Management | `pages/admin-department-management.html` | Admin | C / R / U / D | - | SV3 |
-| 11 | User Management | `pages/admin-user-management.html` | Admin | C / R / U / D | Phân quyền RBAC | SV3 |
-| 12 | System Settings & AI SLA | `pages/admin-system-settings.html` | Admin | C / R / U / D | Cấu hình Engine | SV3 |
+| 1 | Onboarding Dashboard | `pages/newhire-onboarding-dashboard.html` | Nhân sự mới | R | Gợi ý tiến độ | Nguyễn Minh Phương |
+| 2 | Checklist Hội nhập | `pages/newhire-checklist.html` | Nhân sự mới | C / R / U | - | Nguyễn Minh Phương |
+| 3 | AI Help: Hỏi đáp Chính sách | `pages/newhire-ai-help.html` | Nhân sự mới | C / R / U / D | **AI-1: Policy Q&A** | Nguyễn Minh Phương |
+| 4 | Mentee List & Cảnh báo | `pages/mentor-mentee-list.html` | Mentor | R | Cảnh báo trễ | Lê Minh Hiếu |
+| 5 | Checkin Note 1-on-1 | `pages/mentor-checkin-note.html` | Mentor | C / R / U / D | - | Lê Minh Hiếu |
+| 6 | Task Assignment | `pages/mentor-task-assignment.html` | Mentor | C / R / U / D | Đồng bộ phản hồi | Lê Minh Hiếu |
+| 7 | Journey Management | `pages/hr-journey-management.html` | HR | C / R / U / D | **AI-2: Personalizer** | Nguyễn Trịnh Hòa Hợp |
+| 8 | Document Library | `pages/hr-document-library.html` | HR | C / R / U / D | Tri thức RAG | Nguyễn Trịnh Hòa Hợp |
+| 9 | HR Dashboard & Analytics | `pages/hr-dashboard.html` | HR | C / R / U / D | **AI-3: Progress Risk** | Nguyễn Trịnh Hòa Hợp |
+| 10 | Department Management | `pages/admin-department-management.html` | Admin | C / R / U / D | - | Nguyễn Trịnh Hòa Hợp |
+| 11 | User Management | `pages/admin-user-management.html` | Admin | C / R / U / D | Phân quyền RBAC | Nguyễn Trịnh Hòa Hợp |
+| 12 | System Settings & AI SLA | `pages/admin-system-settings.html` | Admin | C / R / U / D | Cấu hình Engine | Nguyễn Trịnh Hòa Hợp |
 
 ### Các màn hình dùng chung:
 - `index.html`: Cổng thông tin giới thiệu đồ án và điều phối vai trò.

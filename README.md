@@ -1,7 +1,7 @@
 # BTL-20 – OnboardAI – Hành trình hội nhập nhân sự mới
 
 > **Học phần:** PHÁT TRIỂN ỨNG DỤNG WEB CƠ BẢN – CSE122  
-> **Nhóm thực hiện:** Nhóm 3 sinh viên (SV1, SV2, SV3)  
+> **Nhóm thực hiện:** Nhóm 3 sinh viên (Nguyễn Minh Phương, Nguyễn Trịnh Hòa Hợp, Lê Minh Hiếu)  
 > **Loại sản phẩm:** Sản phẩm Web Frontend nguyên mẫu (Mini-product) đa vai trò, CRUD có ý nghĩa, responsive, tương tác DOM và trải nghiệm AI phía Frontend.
 
 ---

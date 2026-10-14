@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thư viện Tài liệu & Sổ tay | OnboardAI</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <aside class="app-sidebar" id="app-sidebar"></aside>
+
+    <div class="app-main">
+      <header class="app-topbar" id="app-topbar"></header>
+
+      <main class="page-content">
+        <!-- Header trang -->
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+              Thư viện Tài liệu & Chính sách Số
+            </h1>
+            <p class="page-subtitle">Kho tri thức nội bộ chuẩn hóa phục vụ tra cứu nhân sự và huấn luyện mô hình AI RAG</p>
+          </div>
+          <div class="header-actions">
+            <button class="btn btn-primary" onclick="openAddDocModal()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Tải lên tài liệu mới (C)
+            </button>
+          </div>
+        </div>
+
+        <!-- Bộ lọc & Tìm kiếm -->
+        <div class="filter-bar">
+          <div class="filter-pills" id="doc-cat-filters">
+            <button class="filter-pill active" data-cat="all" onclick="setDocFilter('all')">Tất cả tài liệu</button>
+            <button class="filter-pill" data-cat="Chính sách nhân sự" onclick="setDocFilter('Chính sách nhân sự')">Chính sách nhân sự</button>
+            <button class="filter-pill" data-cat="Kỹ thuật & Bảo mật" onclick="setDocFilter('Kỹ thuật & Bảo mật')">Kỹ thuật & IT</button>
+          </div>
+
+          <div style="flex: 1; max-width: 320px; min-width: 200px;">
+            <input type="text" class="form-control" placeholder="Tìm theo tên, nội dung, thẻ..." id="doc-search-input" onkeyup="renderDocuments()" />
+          </div>
+        </div>
+
+        <!-- Lưới tài liệu (Document Cards Grid) -->
+        <div id="docs-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem;">
+          <!-- Render JS -->
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- Modal Đọc nội dung tài liệu chi tiết -->
+  <div class="modal-overlay" id="read-doc-modal">
+    <div class="modal-card" style="max-width: 720px;">
+      <div class="modal-header">
+        <div>
+          <h3 id="read-doc-title">Tên tài liệu</h3>
+          <span style="font-size: 0.785rem; color: var(--text-muted);" id="read-doc-meta">Cập nhật: 2026-09-01</span>
+        </div>
+        <button class="modal-close-btn" onclick="UI.closeModal('read-doc-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="read-doc-content" style="font-size: 0.95rem; line-height: 1.7; color: #334155; white-space: pre-line; background: #f8fafc; padding: 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <!-- Nội dung văn bản -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="UI.closeModal('read-doc-modal')">Đóng</button>
+        <button class="btn btn-primary" id="btn-download-doc" onclick="simulateDownload()">
+          📥 Tải bản đầy đủ (PDF)
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Thêm / Chỉnh sửa Tài liệu (C/U) -->
+  <div class="modal-overlay" id="doc-form-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="doc-modal-title">Tải Lên Tài Liệu Mới</h3>
+        <button class="modal-close-btn" onclick="UI.closeModal('doc-form-modal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form id="doc-form">
+          <input type="hidden" id="doc-edit-id" />
+
+          <div class="form-group">
+            <label class="form-label">Tiêu đề tài liệu / Quy chế</label>
+            <input type="text" class="form-control" id="form-doc-title" placeholder="Ví dụ: Quy chế khen thưởng & đánh giá định kỳ 2026" required />
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Danh mục</label>
+              <select class="form-control" id="form-doc-cat">
+                <option value="Chính sách nhân sự">Chính sách nhân sự</option>
+                <option value="Kỹ thuật & Bảo mật">Kỹ thuật & Bảo mật</option>
+                <option value="Đào tạo & Phát triển">Đào tạo & Phát triển</option>
+                <option value="Hành chính tổng vụ">Hành chính tổng vụ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phạm vi áp dụng</label>
+              <input type="text" class="form-control" id="form-doc-dept" value="Toàn công ty" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tóm tắt ngắn (Dành cho AI trích xuất)</label>
+            <textarea class="form-control" id="form-doc-summary" rows="2" placeholder="Tóm tắt ngắn gọn các điều khoản cốt lõi để AI hiểu ngữ cảnh..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nội dung văn bản chi tiết (Định dạng văn bản)</label>
+            <textarea class="form-control" id="form-doc-content" rows="4" placeholder="Nhập toàn văn quy định hoặc hướng dẫn thực hiện..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Từ khóa phân loại (Tags, cách nhau bởi dấu phẩy)</label>
+            <input type="text" class="form-control" id="form-doc-tags" placeholder="Chính sách, Phúc lợi, Nghỉ phép, Thử việc" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="UI.closeModal('doc-form-modal')">Hủy</button>
+        <button class="btn btn-primary" onclick="submitDocForm()">Lưu tài liệu</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/storage.js"></script>
+  <script src="../js/ui.js"></script>
+  <script>
+    let currentCategoryFilter = "all";
+    let readingDocId = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      UI.initLayout("hr-document-library.html", "Thư viện Tài liệu & Chính sách");
+
+      // Đọc URL search param nếu có
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get("q");
+      if (query) {
+        document.getElementById("doc-search-input").value = query;
+      }
+
+      renderDocuments();
+    });
+
+    function setDocFilter(cat) {
+      currentCategoryFilter = cat;
+      document.querySelectorAll("#doc-cat-filters .filter-pill").forEach(p => {
+        p.classList.toggle("active", p.getAttribute("data-cat") === cat);
+      });
+      renderDocuments();
+    }
+
+    function renderDocuments() {
+      const searchVal = document.getElementById("doc-search-input").value;
+      const docs = StorageManager.getDocuments(currentCategoryFilter, searchVal);
+
+      const grid = document.getElementById("docs-grid");
+      if (docs.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-icon">📂</div>
+            <div class="empty-title">Không tìm thấy tài liệu phù hợp</div>
+            <p class="empty-desc">Thử tìm kiếm với từ khóa khác hoặc bấm "Tải lên tài liệu mới".</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = docs.map(d => `
+        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <span class="badge badge-info">${d.category}</span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">${d.fileSize || '1.5 MB'}</span>
+            </div>
+
+            <h3 style="font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 0.4rem; cursor: pointer;" onclick="openReadDocModal('${d.id}')">
+              ${d.title}
+            </h3>
+
+            <p style="font-size: 0.85rem; color: #64748b; line-height: 1.4; margin-bottom: 0.85rem;">
+              ${d.summary}
+            </p>
+
+            <div style="display: flex; gap: 0.35rem; flex-wrap: wrap; margin-bottom: 1rem;">
+              ${(d.tags || []).map(t => `<span class="badge badge-neutral" style="font-size: 0.68rem;">#${t}</span>`).join("")}
+            </div>
+          </div>
+
+          <div style="border-top: 1px solid var(--border-light); padding-top: 0.75rem; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.75rem; color: var(--text-light);">
+              Cập nhật: ${d.lastUpdated} • 📥 ${d.downloads || 0} lượt tải
+            </span>
+            <div style="display: flex; gap: 0.3rem;">
+              <button class="btn btn-primary btn-sm" onclick="openReadDocModal('${d.id}')">Đọc ngay</button>
+              <button class="btn btn-outline btn-sm" onclick="editDocModal('${d.id}')">Sửa</button>
+              <button class="btn btn-outline btn-sm" style="color: #ef4444;" onclick="deleteDocAction('${d.id}')">✕</button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function openReadDocModal(docId) {
+      const doc = StorageManager.getDocument(docId);
+      if (!doc) return;
+      readingDocId = docId;
+
+      document.getElementById("read-doc-title").textContent = doc.title;
+      document.getElementById("read-doc-meta").textContent = `Danh mục: ${doc.category} • Áp dụng: ${doc.department} • Cập nhật: ${doc.lastUpdated}`;
+      document.getElementById("read-doc-content").textContent = doc.content || doc.summary;
+
+      UI.openModal("read-doc-modal");
+    }
+
+    function simulateDownload() {
+      if (!readingDocId) return;
+      const count = StorageManager.incrementDownload(readingDocId);
+      UI.showToast("Đang tải xuống", `Bắt đầu tải tài liệu PDF. Tổng cộng: ${count} lượt tải.`, "success");
+      renderDocuments();
+    }
+
+    function openAddDocModal() {
+      document.getElementById("doc-modal-title").textContent = "Tải Lên Tài Liệu Mới";
+      document.getElementById("doc-edit-id").value = "";
+      document.getElementById("doc-form").reset();
+      UI.openModal("doc-form-modal");
+    }
+
+    function editDocModal(docId) {
+      const doc = StorageManager.getDocument(docId);
+      if (!doc) return;
+
+      document.getElementById("doc-modal-title").textContent = "Chỉnh sửa Tài Liệu";
+      document.getElementById("doc-edit-id").value = doc.id;
+      document.getElementById("form-doc-title").value = doc.title;
+      document.getElementById("form-doc-cat").value = doc.category;
+      document.getElementById("form-doc-dept").value = doc.department;
+      document.getElementById("form-doc-summary").value = doc.summary;
+      document.getElementById("form-doc-content").value = doc.content || "";
+      document.getElementById("form-doc-tags").value = (doc.tags || []).join(", ");
+
+      UI.openModal("doc-form-modal");
+    }
+
+    function submitDocForm() {
+      const editId = document.getElementById("doc-edit-id").value;
+      const title = document.getElementById("form-doc-title").value.trim();
+      const cat = document.getElementById("form-doc-cat").value;
+      const dept = document.getElementById("form-doc-dept").value.trim();
+      const summary = document.getElementById("form-doc-summary").value.trim();
+      const content = document.getElementById("form-doc-content").value.trim();
+      const tagsStr = document.getElementById("form-doc-tags").value.trim();
+      const tags = tagsStr ? tagsStr.split(",").map(t => t.trim()).filter(Boolean) : [];
+
+      if (!title || !summary) {
+        UI.showToast("Thiếu thông tin", "Vui lòng nhập tiêu đề và tóm tắt nội dung tài liệu.", "warning");
+        return;
+      }
+
+      if (editId) {
+        StorageManager.updateDocument(editId, {
+          title, category: cat, department: dept, summary, content, tags
+        });
+        UI.showToast("Cập nhật thành công", "Đã lưu thay đổi cho tài liệu.", "success");
+      } else {
+        StorageManager.addDocument({
+          title, category: cat, department: dept, summary, content, tags
+        });
+        UI.showToast("Tải lên thành công", "Tài liệu mới đã sẵn sàng cho nhân viên tra cứu và AI trích xuất.", "success");
+      }
+
+      UI.closeModal("doc-form-modal");
+      renderDocuments();
+    }
+
+    function deleteDocAction(docId) {
+      UI.showConfirm("Xóa tài liệu", "Bạn có chắc chắn muốn xóa tài liệu này khỏi kho tri thức?", () => {
+        StorageManager.deleteDocument(docId);
+        UI.showToast("Đã xóa", "Tài liệu đã được gỡ bỏ khỏi thư viện.", "info");
+        renderDocuments();
+      });
+    }
+  </script>
+</body>
+</html>
+
